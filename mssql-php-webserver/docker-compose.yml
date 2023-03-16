@@ -1,0 +1,31 @@
+version: "3.7"
+services:
+
+  db:
+    image: mysql:latest
+    environment:
+      - MYSQL_HOST=localhost
+      - MYSQL_DATABASE=db_vero_digital
+      - MYSQL_USER=sa
+      - MYSQL_ROOT_PASSWORD=Un!q@to2023
+      - MYSQL_ALLOW_EMPTY_PASSWORD=1
+    volumes:
+      - "./db:/docker-entrypoint-initdb.d"  # sync persistent sql files with container
+  www:   
+    image: php:apache
+    volumes:
+      - "./:/var/www/html"
+    ports:
+      - 80:80
+      - 443:443 # for ssl traffic   
+  
+  phpmyadmin:
+    image: phpmyadmin
+    ports:
+      - 8081:80
+    environment:
+      - PMA_HOST=db
+      - PMA_PORT=3306
+      - PMA_ARBITRARY=1
+    
+
